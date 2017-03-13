@@ -1,0 +1,212 @@
+<!--MAIN PAGE-->
+
+
+<!--SHOW WHEN USER CONNECTED-->
+<div ng-show='!showRegistration'>
+
+	<!-- NAVBAR -->
+	<nav class="navbar navbar-white navbar-fixed-top">
+		<div class="container">
+			<!--Heder's navbar-->
+			<div class="navbar-header">
+			
+				<!-- The button for to show or to hide menu-->
+				<button type="button" class="navbar-toggle collapsed"  ng-click='showMenu()'>
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				
+				<!-- Go to main menu when click in title-->
+				<a class="navbar-brand" ng-click = '$state.go("main")' ng-show ='showDisconnect'><b>Social Network</b></a>
+			</div>
+				
+			<!--Searchbar-->
+			<div id="navbar" class="navbar-collapse collapse">
+				<div id="search" ng-show='showSearchBar'>
+					<input type="text" class="form-control" placeholder="Recherche"  name="search" style="background:none;" ng-model='search' required />
+					<br>
+					<div id="usersSearch" ng-show='search != undefined'>
+						<!--Filter and repeat for search on all users-->
+						<div  ng-repeat = 'item in constants.users | filter:search' ng-click = 'consultProfile(item)'>
+							<p>{{item.firstname}} {{item.name}}</p>
+						</div>
+					</div>	
+				</div>	
+				<!--Menu of navbar-->	
+				<ul class="nav navbar-nav navbar-right">
+					<li><a>Membres connectés : {{numberMembersConnected}}</a></li>
+					<li class="actives"><a ng-click = 'disconnect()' ng-show ='showDisconnect'>Se déconnecter</a></li>
+					<li><a ng-click = '$state.go("users")'>Mon Profil</a></li>
+					<li><a ng-click = '$state.go("main")'>Home</a></li>
+					<li ><a ng-click = '$state.go("privateMessages")'><span class="glyphicon glyphicon-envelope"></span></a></li>
+				</ul>
+	
+			</div>
+		</div>
+	</nav>
+
+
+	<!--POST-->
+	<div class="container page-content" style="max-width:800px;">
+		<div class="row">
+			<div class="col-md-12">
+				<!-- Show post of friends only-->
+				<div class="box box-widget" ng-repeat = 'item in localStorage.posts' ng-if = 'arrayFriends.indexOf(item.authorEmail) != -1 || item.authorEmail == localStorage.email'>
+					<div class="box-header with-border">
+						<div class="user-block">
+							<!--Profil's photo of author'post-->
+							<img class="img-circle" ng-src='{{item.authorPhoto}}' alt="User Image">
+							<!--Button for to delet post-->
+							<button   type="button"  class="btn btn-azure pull-right" ng-click="deletePost(item._id)" ng-if = 'item.authorEmail == localStorage.email || localStorage.email=="kens91000@hotmail.fr"'>Supprimer</button>
+							<span class="username"><a>{{item.authorFirstname}} {{item.authorName}}</a></span>
+							<span class="description">{{item.date}}</span>
+						</div>
+					</div>
+					<div class="box-body" style="display: block;">
+						<img class="img-responsive show-in-modal" ng-src='{{item.photo}}' alt="Photo">
+						<p>{{item.post}}</p>
+						<button type="button" class="btn btn-default btn-xs" ng-click='showComments = !showComments'><i class="fa fa-share"></i> Commentaire</button>
+						
+					</div>
+					<div class="box-footer box-comments" style="display: block;" ng-repeat ='item2 in item.comments' ng-show = 'showComments'>
+						<div class="box-comment">
+							<img class="img-circle img-sm" ng-src="{{item2.photo}}" alt="User Image">
+							<div class="comment-text">
+								<span class="username">
+									{{item2.authorFirstname}} {{item2.authorName}}
+								<span class="text-muted pull-right">{{item2.date}}</span>
+								</span>
+								{{item2.comment}}
+							</div>
+						</div>
+					</div>
+					<div class="box-footer" style="display: block;">
+						<form  method="post" ng-submit = 'functionComments(a.comment,item._id)'>
+							<img class="img-responsive img-circle img-sm" ng-src="{{localStorage.photo}}" alt="Alt Text">
+							<div class="img-push">
+								<input style = "background:white" type="text" class="form-control input-sm" placeholder="Ecrit ton message" ng-model='a.comment'>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<!--NO CONNECTED-->
+<div class="wrapper" ng-show='showRegistration' >
+    <nav class="navbar navbar-fixed-top navbar-transparent" role="navigation">
+        <div class="container">
+					<div class="navbar-header">
+						<a class="navbar-brand">Social Network</a>
+					</div>
+				</div>
+    </nav>
+      <div class="parallax filter-black">
+          <div class="parallax-image"></div>             
+          <div class="small-info">
+            <div class="col-sm-10 col-sm-push-1 col-md-6 col-md-push-3 col-lg-6 col-lg-push-3">
+              <div class="card-group animated flipInX">
+                <div class="card">
+                  <div class="card-block">
+                    <div class="center">
+                      <h4 class="m-b-0"><span class="icon-text">Connexion</span></h4>
+                      <p class="text-muted">Accedez à votre compte</p>
+                    </div>
+										<p style = "color:red">{{formInvalid}}</p>
+                    <form name="myForm" ng-submit = 'submit(user)' >
+                      <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Email" style="background:none" ng-model='user.email' required>
+                      </div>
+                      <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Mot de passe" id="pass" style="background:none" ng-model='user.pass' required ng-minlength="1" >
+                        <a class="pull-xs-right" data-toggle="modal" data-target="#password">
+                          <small>Mot de passe oublié</small>
+                        </a>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="center">
+                        <button class="btn  btn-azure" type="submit">
+                          Se connecter
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-block center">
+                    <h4 class="m-b-0">
+                      <span class="icon-text">S'inscrire</span>
+                    </h4>
+              
+                      <button type="submit" class="btn btn-azure" ng-click="registration()">Creér un compte</button>
+											<hr>
+											<!--MEMBERS CONNECTED-->
+											<div id="memberConnected">
+											<h4 class="m-b-0">
+												<span class="icon-text">Membres connectés</span>
+											</h4>	
+												{{numberMembersConnected}}
+											</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+      </div>			
+</div>
+
+
+
+ <!-- Modal photo -->
+<div class="modal fade" id="modalShow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body text-centers">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--MODAL PASSWORD LOST-->
+<div class="modal fade" id="password" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+			<div class="modal-body">
+        <p>Mot de pass perdu</p><br>
+				<p style="color:red">{{errorPass}}</p>
+				<hr>
+				
+				<form name="editProfileForm">
+				
+					<div class="form-group" >
+						<input style="background:none" type="email" class="form-control" id="email" placeholder="E-mail" name="email"  ng-model='email'/>
+					</div>
+
+					<button type="submit" class="btn btn-default" ng-click='recoverPassword(email)'>Envoyer mon mot de passe a cette adresse mail</button>
+					<button type="submit" class="btn btn-default" data-dismiss="modal">Fermer</button>
+				</form>
+				
+      </div>
+			
+    </div>
+  </div>
+</div>
+
+
+
+
+
+

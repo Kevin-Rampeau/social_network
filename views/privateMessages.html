@@ -1,0 +1,208 @@
+<div id="privateMessages">
+
+    <!-- NAVBAR -->
+   <nav class="navbar navbar-white navbar-fixed-top">
+     <div class="container">
+       <div class="navbar-header">
+         <button type="button" class="navbar-toggle collapsed"  ng-click='showMenu()'>
+           <span class="sr-only">Toggle navigation</span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+         </button>
+         <a class="navbar-brand" ng-click = '$state.go("main")' ng-show ='showDisconnect'><b>Social Network</b></a>
+       </div>
+
+       <div id="navbar" class="navbar-collapse collapse">
+				<div id="search" ng-show='showSearchBar'>
+					<input type="text" class="form-control" placeholder="Recherche"  name="search" style="background:none;" ng-model='search' required />
+					<br>
+					<div id="usersSearch" ng-show='search != undefined'>
+						<div  ng-repeat = 'item in constants.users | filter:search' ng-click = 'consultProfile(item)'>
+							<p>{{item.firstname}} {{item.name}}</p>
+						</div>
+					</div>	
+				</div>					
+         <ul class="nav navbar-nav navbar-right">
+           <li class="actives"><a ng-click = 'disconnect()'>Se déconnecter</a></li>
+           <li><a ng-click = '$state.go("users")'>Mon Profil</a></li>
+           <li><a ng-click = '$state.go("main")'>Home</a></li>
+					<li ><a ng-click = '$state.go("privateMessages")'><span class="glyphicon glyphicon-envelope"></span></a></li>
+				</ul>
+
+			</div>
+		</div>
+	</nav>
+	
+
+	<div class="container page-content">
+    <div class="row">
+      <div class="tile tile-alt" id="messages-main">
+			
+				<!--FRIENDS LIST-->
+				<div class="ms-menu">
+					<div class="ms-user clearfix">
+            <img ng-src="{{localStorage.photo}}" alt="" class="img-avatar pull-left">
+            <div>{{localStorage.firstname}} {{localStorage.name}}<br> {{localStorage.email}}</div>
+          </div>
+					<div class="p-15">
+            <div>
+              <div class="btn btn-azure btn-block" data-toggle="modal" data-target="#myModalSubjectDiscussion" >Sujets de discussion</div>
+            </div>
+					</div>
+					<div class="list-group lg-alt">
+						<a  class="list-group-item media" ng-repeat = 'item in localStorage.listDiscussionSubjects' ng-click = 'functionShowSubject(item)'>
+							<div class="media-body">
+                 <small class="list-group-item-heading">{{item.subject}}</small>
+							</div>
+						</a>
+					</div>
+          
+					<div class="p-15">
+            <div>
+              <div class="btn btn-azure btn-block" >Messages</div>
+            </div>
+          </div>
+					<div class="list-group lg-alt">
+					  <a  class="list-group-item media" ng-repeat = 'item in localStorage.friends' ng-click = 'showMessages(item)'>
+              <div class="pull-left">
+                  <img ng-src="{{item.photo}}" alt="" class="img-avatar">
+              </div>
+              <div class="media-body">
+                  <small class="list-group-item-heading">{{item.firstname}} {{item.name}}</small>
+              </div>
+            </a>
+					</div>
+				</div>
+				
+				
+				
+				<!--SUBJECTS-->
+				<div class="ms-body" ng-show="showSubjects">
+          <div class="action-header clearfix">
+              <div class="visible-xs" id="ms-menu-trigger" ng-click = 'showFriends(item)'>
+                  <i class="fa fa-bars"></i>
+              </div>
+              
+              <div class="pull-left hidden-xs" >
+                  <img src="img/Friends/guy-2.jpg" alt="" class="img-avatar m-r-10">
+                  <div class="lv-avatar pull-left">
+                      
+                  </div>
+                  <span>{{discussion.subject}}</span>
+              </div>
+
+          </div>
+					
+					<div ng-repeat = 'item in discussion.messages'>
+						<div class="message-feed media" ng-show='item.email == localStorage.email'>
+								<div class="pull-left">
+										<img ng-src="{{item.photo}}" alt="" class="img-avatar">
+								</div>
+								<div class="media-body">
+										<div class="mf-content">
+												{{item.message}}
+										</div>
+										<small class="mf-date"><i class="fa fa-clock-o"></i> {{item.date}}</small>
+								</div>
+						</div>
+						
+						<div class="message-feed right" ng-show='item.email != localStorage.email'>
+								<div class="pull-right">
+										<img ng-src="{{item.photo}}" alt="" class="img-avatar">
+								</div>
+								<div class="media-body">
+										<div class="mf-content">
+												{{item.message}}
+										</div>
+										<small class="mf-date"><i class="fa fa-clock-o"></i> {{item.date}}</small>
+								</div>
+						</div>
+					</div>
+					
+					<form ng-submit='sendMessageSubject(messageSubject)'>
+					<div class="msb-reply">
+            <input style="width:100%; height:50px; background:white; border: none" placeholder="Ecrit ton message" ng-model='messageSubject'></input>
+            <button type="submit"><i class="fa fa-paper-plane-o" ></i></button>
+					</div>
+					</form>
+				</div>				
+				
+				<!--MESSAGES-->
+				<div class="ms-body" ng-show="showDiscussion">
+          <div class="action-header clearfix">
+              <div class="visible-xs" id="ms-menu-trigger" ng-click = 'showFriends(item)'>
+                  <i class="fa fa-bars"></i>
+              </div>
+              
+              <div class="pull-left hidden-xs" >
+                  <img ng-src="{{user.photo}}" alt="" class="img-avatar m-r-10">
+                  <div class="lv-avatar pull-left">
+                      
+                  </div>
+                  <span>{{user.firstname}} {{user.name}}</span>
+              </div>
+
+          </div>
+					<div  style="height:500px; overflow:auto;" id="scroll">
+					<div ng-repeat = 'item in localStorage.discussionList  | filter:user.email'>
+						<div class="message-feed media" ng-show='item.sent'>
+								<div class="pull-left">
+										<img ng-src="{{localStorage.photo}}" alt="" class="img-avatar">
+								</div>
+								<div class="media-body">
+										<div class="mf-content">
+												{{item.message}}
+										</div>
+										<small class="mf-date"><i class="fa fa-clock-o"></i> {{item.date}}</small>
+								</div>
+						</div>
+						
+						<div class="message-feed right" ng-show='item.received'>
+								<div class="pull-right">
+										<img ng-src="{{item.photo}}" alt="" class="img-avatar">
+								</div>
+								<div class="media-body">
+										<div class="mf-content">
+												{{item.message}}
+										</div>
+										<small class="mf-date"><i class="fa fa-clock-o"></i> {{item.date}}</small>
+								</div>
+						</div>
+					</div>
+					</div>
+
+					<form ng-submit='sendPrivateMessage(user,message)'>
+					<div class="msb-reply">
+            <input style="width:100%; height:50px; background:white;border:none; padding-left:10px;" placeholder="Ecrit ton message" ng-model='message'></input>
+            <button type="submit"><i class="fa fa-paper-plane-o" ></i></button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+
+
+<div class="modal fade" id="myModalSubjectDiscussion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-body">
+        Créer un sujet de discussion
+      </div>
+			<div class="form-group" >
+				<input type="text" class="form-control" id="firstname" placeholder="Sujet de discussion" name="discussion" style="background:none"  ng-model='subject'  ng required ng-minlength='1' ng-maxlength='128'/>
+			</div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-azure" data-dismiss="modal" ng-click='subjectDiscussion(subject)'>créer </button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" ng-click='acceptFriendRecommendation(user)'>fermer</button>
+      </div>
+    </div>
+  </div>
+</div>

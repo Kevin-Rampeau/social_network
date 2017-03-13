@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+	<head>
+    <meta charset="utf-8">
+	
+    <title>Social Network</title>
+		
+		
+		<link rel="stylesheet" type="text/css" href="styles/style.css"/>
+		
+		<!--Socket-->
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+		<!--Angular-->
+		<script src="scripts/angular.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
+		
+		<!--Jquery-->
+    <script src="assets/js/jquery.1.11.1.min.js"></script>
+		
+		<!--Bootstrap-->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+		<!--template Bootstrap-->
+		
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="img/favicon.png">
+		<link href="font-awesome.4.6.1/css/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/animate.min.css" rel="stylesheet">
+    <link href="assets/css/timeline.css" rel="stylesheet">
+    <link href="assets/css/login_register.css" rel="stylesheet">
+		<link href="assets/css/photos1.css" rel="stylesheet">
+		<link href="assets/css/profile2.css" rel="stylesheet">
+		<link href="assets/css/profile4.css" rel="stylesheet">
+		<link href="assets/css/messages2.css" rel="stylesheet">
+		<link href="assets/css/sidebar_profile.css" rel="stylesheet">
+    <link href="assets/css/buttons.css" rel="stylesheet">
+    <script src="assets/js/custom.js"></script>
+  </head>
+	
+  <body ng-app = 'app'>
+	
+		<div ui-view></div>
+		
+		<!--MY APP-->
+		<script src="app.js"></script>
+		
+		<!--ROUTE-->
+		<script src="routes.js"></script>
+		
+		<!--SERVICES-->
+		<script src="scripts/services/socketIo.js"></script>
+		<script src="scripts/services/constants.js"></script>
+		<script src="scripts/services/api.client.js"></script>
+		<script src="scripts/services/getUserObject.js"></script>
+		<script src="scripts/services/upload.js"></script>
+		<!--CONTROLLERS-->
+		<script src="scripts/controllers/main.controller.js"></script>
+		<script src="scripts/controllers/users.controller.js"></script>
+		<script src="scripts/controllers/register.controller.js"></script>
+		<script src="scripts/controllers/friend.controller.js"></script>
+		<script src="scripts/controllers/privateMessages.controller.js"></script>
+	</body>
+</html>

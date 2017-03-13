@@ -1,0 +1,208 @@
+
+<!--TEMPLATE-->
+
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-white navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed"  ng-click='showMenu()'>
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" ng-click = '$state.go("main")' ng-show ='showDisconnect'><b>Social Network</b></a>
+      </div>
+
+      <div id="navbar" class="navbar-collapse collapse">
+			<div id="search" ng-show='showSearchBar'>
+				<input type="text" class="form-control" placeholder="Recherche"  name="search" style="background:none;" ng-model='search' required />
+				<br>
+				<div id="usersSearch" ng-show='search != undefined'>
+					<div  ng-repeat = 'item in constants.users | filter:search' ng-click = 'consultProfile(item)'>
+						<p>{{item.firstname}} {{item.name}}</p>
+					</div>
+				</div>	
+			</div>					
+        <ul class="nav navbar-nav navbar-right">
+          <li class="actives"><a ng-click = 'disconnect()' ng-show ='showDisconnect'>Se déconnecter</a></li>
+					<li><a ng-click = '$state.go("users")'>Mon Profil</a></li>
+          <li><a ng-click = '$state.go("main")'>Home</a></li>
+				<li ><a ng-click = '$state.go("privateMessages")'><span class="glyphicon glyphicon-envelope"></span></a></li>
+			</ul>
+
+		</div>
+	</div>
+</nav>
+<div class="container page-content">
+<div class="tab-content" >
+	<div role="tabpanel" class="tab-pane active" id="timeline">
+	
+	
+					<div class="row" style="margin-bottom:20px">
+            <div class="col-md-12">
+              <div class="bg-picture" style="background-image:url('img/bg/bg1.jpg')">
+                <span class="bg-picture-overlay"></span><!-- overlay -->
+                <!-- meta -->
+                <div class="box-layout meta bottom">
+                  <div class="col-md-6 clearfix">
+                    <span class="img-wrapper pull-left m-r-15">
+                      <img ng-src="{{localStorage.friend.photo}}" alt="" style="width:64px" class="br-radius">
+                    </span>
+                    <div class="media-body">
+                      <h3 class="text-white mb-2 m-t-10 ellipsis">{{localStorage.friend.firstname}} {{localStorage.friend.name}}</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    <div class="row">
+			
+			<div class="col-md-5">
+			
+				<!--ABOUT-->	
+				<div class="widget" ng-if='arrayFriends.indexOf(localStorage.friend.email) != -1'>
+					<div class="widget-header">
+						<h3 class="widget-caption">Informations</h3>
+					</div>
+					<div class="widget-body bordered-top bordered-sky">
+						<ul class="list-unstyled profile-about margin-none">
+							<li class="padding-v-5">
+								<div class="row">
+									<div class="col-sm-4"><span class="text-muted">Age</span></div>
+									<div class="col-sm-8">{{localStorage.friend.age}} ans</div>
+								</div>
+							</li>
+							<li class="padding-v-5">
+								<div class="row">
+									<div class="col-sm-4"><span class="text-muted">Numéro de téléphone</span></div>
+									<div class="col-sm-8">{{localStorage.friend.phone}}</div>
+								</div>
+							</li>
+							<li class="padding-v-5">
+								<div class="row">
+									<div class="col-sm-4"><span class="text-muted">Genre</span></div>
+									<div class="col-sm-8">{{localStorage.friend.sex}}</div>
+								</div>
+							</li>
+							<li class="padding-v-5">
+								<div class="row">
+									<div class="col-sm-4"><span class="text-muted">Email</span></div>
+									<div class="col-sm-8">{{localStorage.friend.email}}</div>
+								</div>
+							</li>
+						</ul>
+						<button type="button" class="btn btn-azure" ng-show='localStorage.showRequestFriend' ng-click='friendRequest(localStorage.friend)'>Ajouter à ma liste d'amis</button>
+	
+						<button type="button" class="btn btn-azure" ng-show='localStorage.showFriendRequestAlreadyReceived' ng-click = 'acceptFriendRequest(localStorage.friend)'>Accepter la demande d'ami</button>
+	
+						<p ng-show='localStorage.showFriendRequestAlreadySent'>Demande en attente</p>
+	
+						<button type="button" style="text-align:center" class="btn btn-azure" ng-show='localStorage.showDeleteFriendsList'  ng-click='deleteFriend(localStorage.friend)' ng-if='localStorage.friend.email!="kens91000@hotmail.fr"'>Supprimer de ma liste d'amis</button>
+	
+						<button type="button" style="text-align:center" class="btn btn-azure" ng-show=true data-toggle="modal" data-target="#recommend" ng-if='localStorage.friend.email!="kens91000@hotmail.fr"'>Recommander un ami</button>
+					</div>
+				</div>
+				
+				
+				<!--FRIEND-->
+				<div class="widget widget-friends">
+					<div class="widget-header">
+						<h3 class="widget-caption">Amis</h3>
+					</div>
+					<div class="widget-body bordered-top  bordered-sky">
+						<div class="row">
+							<div class="col-md-12">
+								<ul class="img-grid" style="margin: 0 auto;">
+									<li style="margin-right:20px;" ng-repeat = 'item in localStorage.friendsOfFriend' ng-click = 'consultProfile(item)' ng-if='item.email != "kens91000@hotmail.fr"'>
+										<img ng-src="{{item.photo}}" alt="image">
+										<p>{{item.firstname}}</p>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+				<!--POST-->
+			<div class="col-md-7" ng-if='arrayFriends.indexOf(localStorage.friend.email) != -1'>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-12">
+
+								<!--   POSTED -->
+                <div class="box box-widget" ng-repeat = 'item in localStorage.posts' ng-if='item.authorEmail == localStorage.friend.email' >
+                     <div class="box-header with-border">
+                       <div class="user-block">
+                         <img class="img-circle" ng-src='{{localStorage.friend.photo}}' alt="User Image">
+                         <span class="username"><a ng-click='$state.go("users")'>{{item.authorFirstname}} {{item.authorName}}</a></span>
+												 <button   type="button"  class="btn btn-azure pull-right" ng-click="deletePost(item._id)" ng-if = ' localStorage.email=="kens91000@hotmail.fr"'>Supprimer</button>
+                         <span class="description">{{item.date}}</span>
+                       </div>
+                     </div>
+									<div class="box-body" style="display: block;">
+                       <img class="img-responsive show-in-modal" ng-src='{{item.photo}}' alt="Photo">
+                       <p>{{item.post}}</p>
+										<button type="button" class="btn btn-default btn-xs" ng-click='showComments = !showComments'><i class="fa fa-share"></i> Commentaire</button>
+										
+                     </div>
+                  <div class="box-footer box-comments" style="display: block;" ng-repeat ='item2 in item.comments' ng-show = 'showComments'>
+										<div class="box-comment">
+											<img class="img-circle img-sm" ng-src="{{item2.photo}}" alt="User Image">
+											<div class="comment-text">
+												<span class="username">
+													{{item2.authorFirstname}} {{item2.authorName}}
+													<span class="text-muted pull-right">{{item2.date}}</span>
+												</span>
+												{{item2.comment}}
+											</div>
+                    </div>
+                  </div>
+                  <div class="box-footer" style="display: block;">
+										<form  ng-submit = 'functionComments(a.comment,item._id)'>
+											<img class="img-responsive img-circle img-sm" ng-src="{{localStorage.photo}}" alt="Alt Text">
+											<div class="img-push">
+												<input style = "background:white" type="text" class="form-control input-sm" placeholder="Press enter to post comment" ng-model='a.comment'></input>
+											</div>
+										</form>
+									</div>
+                </div><!--  end posts-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+<!--MODAL-->
+
+<!--MODAL RECOMMEND FRIEND-->
+<div class="modal fade" id="recommend" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-body">
+        <p>Recommander des amis</p>
+			<div id="usersSearch" >
+				<div  ng-repeat = 'item in localStorage.friends' ng-click='recommend(item)' data-dismiss="modal" ng-show='localStorage.friend.email != item.email && localStorage.friend.friends.indexOf(item.email) == -1'>
+				
+					<p>{{item.firstname}} {{item.name}}</p>
+				</div>
+			</div>
+				
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,88 @@
+/*********TITLE*********/
+
+header > h1{
+	position:relative;
+	margin-left:10px;
+	margin-top:5px;
+}
+
+/*********SEARCH********/
+
+#search{
+	display:inline-block;
+
+	margin-top:20px;
+	right:10px;
+	background:none; 
+	max-width: 200px;
+	z-index:1000;
+}
+
+#usersSearch
+	position:absolute;
+	background:white;
+}
+
+/*********DISCONNECT*****/
+
+#disconnect{
+	right: 220px;
+	top:10px;
+}
+
+/*********CONNECT*******/
+#connection{
+	text-align:center;
+}
+
+.form-connexion{
+	margin:0 auto; width: 75%;max-width: 400px
+}
+
+
+/**********************************************
+******************REGISTRATION*****************
+**********************************************/	
+	
+	
+#registration{
+	text-align:center
+}
+
+.form-group{
+	margin:0 auto; width: 75%;max-width: 400px
+}
+
+input.ng-valid{
+	background:rgba(0,255,0,0.1);
+}
+
+input.ng-invalid{
+		background:rgba(255,0,0,0.1);
+}
+
+#textFormInvalid{
+	color:red;
+} 
+#textFormValid{
+	color:green;
+} 
+
+/**********************************************
+******************USERS************************
+**********************************************/	
+
+#ConsultFriend{
+	margin-right:20px;
+}
+
+
+
+
+
+
+
+
+
+
+
